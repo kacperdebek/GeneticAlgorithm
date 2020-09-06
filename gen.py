@@ -33,23 +33,14 @@ class GeneticAlgorithm:
         return [random.randint(0, 127) for _ in range(self.population_count)]
 
     def generate_population(self):
-        result = []
-        for i in range(self.population_count):
-            result.append((bin(int(self.values[i]))[2:].zfill(7)))
-        return result
+        return [(bin(int(self.values[i]))[2:].zfill(7)) for i in range(self.population_count)]
 
     def evaluate_fitness(self):
-        fitter = []
-        for i in range(self.population_count):
-            fitter.append(func(bin_to_int(self.population[i])))
-        return fitter
+        return [func(bin_to_int(self.population[i])) for i in range(self.population_count)]
 
     def roulette_selection(self):
-        roulette = []
         eval = self.evaluate_fitness()
-        for i in range(self.population_count):
-            roulette.append((eval[i] / sum(eval) * 100))
-        return roulette
+        return [(eval[i] / sum(eval) * 100) for i in range(self.population_count)]
 
     def spin_the_wheel(self):
         result = []
@@ -102,8 +93,8 @@ for k in range(num_of_iterations):
     gen.crossbreed()
     gen.mutate()
 
-for i in range(gen.population_count):
-     print(str(gen.population[i]) + " - " + str(bin_to_int(gen.population[i])))
-     int_list.append(bin_to_int(gen.population[i]))
+for child in gen.population:
+    print(f"{child} - {bin_to_int(child)}")
+    int_list.append(bin_to_int(child))
 
-print("average value: " + str(statistics.mean(int_list)))
+print(f"average value: {statistics.mean(int_list)}")
